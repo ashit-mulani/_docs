@@ -1,4 +1,4 @@
-import http from "node:http";
+import http, { OutgoingHttpHeaders } from "node:http";
 import { URL } from "node:url";
 import { getFileContent } from "./utils/get-file-content.js";
 import { buildMenuTree } from "./utils/build-menu-tree.js";
@@ -7,36 +7,44 @@ import path from "node:path";
 import fs from "node:fs/promises";
 
 const server = http.createServer(async (req, res) => {
-  const url = new URL(req.url || "/", `http://${req.headers.host}`);
-  const reqPath = decodeURIComponent(url.pathname);
-  if (reqPath == "/favicon.ico") {
-    res.writeHead(204);
-    res.end("");
-    return;
-  }
-  if (reqPath === "/_index.css") {
-    const cssPath = path.resolve(process.cwd(), "public", "_index.css");
-    const css = await fs.readFile(cssPath, "utf-8");
-    res.writeHead(200, {
-      "Content-Type": "text/css; charset=utf-8",
+  try {
+    const url = new URL(req.url || "/", `http://${req.headers.host}`);
+    const reqPath = decodeURIComponent(url.pathname);
+    if (reqPath.startsWith("/_") || reqPath == "/favicon.ico") {
+      const filePath = path.resolve(
+        process.cwd(),
+        "assets",
+        reqPath.replace(/^\//, ""),
+      );
+      const content = await fs.readFile(filePath);
+      const headers: OutgoingHttpHeaders = {};
+      if (filePath.endsWith(".ico")) headers["Content-Type"] = "image/x-icon";
+      res.writeHead(200, headers);
+      res.end(content);
+      return;
+    }
+    const menuTree = await buildMenuTree();
+    const content = await getFileContent({
+      reqPath,
     });
-    res.end(css);
-    return;
+    const cssContent = await getFileContent({
+      reqPath,
+      forFile: "css",
+    });
+    const html = await renderHtml({
+      menuTree,
+      content,
+      currentSlug: reqPath,
+      cssContent,
+    });
+    res.writeHead(200, {
+      "Content-Type": "text/html; charset=utf-8",
+    });
+    res.end(html);
+  } catch (error) {
+    res.writeHead(500);
+    res.end("Internal server error");
   }
-  const menuTree = await buildMenuTree();
-  const content = await getFileContent({
-    reqPath,
-  });
-  const html = await renderHtml({
-    menuTree,
-    content,
-    currentSlug: reqPath,
-  });
-  res.writeHead(200, {
-    "Content-Type": "text/html; charset=utf-8",
-  });
-  res.end(html);
-  return;
 });
 
 const port = process.env.PORT || 9000;

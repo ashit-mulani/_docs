@@ -12,7 +12,7 @@ body {
 .layout {
   display: flex;
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
   min-height: 100vh;
   margin: 0 auto;
   padding: 20px;
@@ -28,7 +28,7 @@ body {
 }
 
 a {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .active {
@@ -38,10 +38,6 @@ a {
 
 a:hover {
   text-decoration: underline;
-}
-
-h2 {
-  color: #d7834f;
 }
 
 ul,
