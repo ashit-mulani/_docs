@@ -24,37 +24,7 @@ export async function renderHtml({
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Documentation</title>
-        <style>
-            * {
-              box-sizing: border-box;
-              color: #B3B1B1;
-            }
-            body {
-              margin: 0;
-              font-family: Arial, sans-serif;
-              background-color: #2A2A2A
-            }
-            .layout {
-              display: flex;
-              min-height: 100vh;
-            }
-            a {
-              text-decoration: none;
-            }
-            .active {
-              color: #E75031;
-              font-weight: 600;
-            }
-            a:hover {
-              text-decoration: underline;
-            }
-            li {
-              list-style: none;
-            }
-            .content{
-              padding: 0px 10px 0px 10px;
-            }
-        </style>
+        <link rel="stylesheet" href="/_index.css" />
       </head>
       <body>
         <div class="layout">

@@ -66,12 +66,7 @@ export async function buildMenuTree(
         const relativePath = path.relative(docsPath, fullPath);
         tree.push({
           title: formatTitle(entry.name),
-          slug:
-            "/" +
-            relativePath
-              .replace(/\.[^/.]+$/, "")
-              .split(path.sep)
-              .join("/"),
+          slug: "/" + relativePath.split(path.sep).join("/"),
           type: "file",
         });
       }
