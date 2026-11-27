@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "dev": "tsx watch index.ts",
-    "build": "tsc && node script/copy-docs.js",
+    "build": "tsc && node script/copy-static-files.js",
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit"
   },
