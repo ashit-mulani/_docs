@@ -5,7 +5,6 @@ export async function mdToHtml(content: string): Promise<string> {
     const html = await marked.parse(content);
     return html;
   } catch (error) {
-    console.error(error);
     return "";
   }
 }

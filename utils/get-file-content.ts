@@ -18,10 +18,8 @@ export async function getFileContent({
       if (stats.isDirectory()) {
         filePath = path.join(filePath, "_index.md");
       } else {
-        console.log("file", filePath);
       }
     }
-    console.log(filePath);
     const content = await fs.readFile(filePath, "utf-8");
     return content;
   } catch (error) {
